@@ -1,0 +1,64 @@
+[Analytical Graphics, Inc]
+WorkbookVersion=9.0
+Title=Simu_and_LS
+Description=
+ApplicationVersion=ODTK 7.2.0
+Scenario=YES
+ActiveMDIState=TRUE
+[WorkState_v1_2]
+ptn_Child1=Frames
+[WorkState_v1_2.Frames]
+ptn_Child1=MainFrame
+ptn_Child2=ChildFrames
+[WorkState_v1_2.Frames.MainFrame]
+WindowPlacement=MCAAAAAACAAAAAAADAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPIGIPPPPPBBBAAAAAHGNPPPPPOAFAAAAA
+Title=Simu_and_LS - ODTK 7 - [HTML Viewer - Scripting Tool]
+[WorkState_v1_2.Frames.ChildFrames]
+ptn_Child1=Document-0
+ptn_Child2=Document-1
+ptn_Child3=Document-2
+ptn_Child4=Document-3
+ptn_Child5=Document-4
+[WorkState_v1_2.Frames.ChildFrames.Document-0]
+ptn_Child1=ViewFrame-0
+[WorkState_v1_2.Frames.ChildFrames.Document-0.ViewFrame-0]
+DocPathName=F:\ODTK\AgUiDllHtmlViewer7.AgUiPiHtmlViewer.1
+DocumentString=AgUiDllHtmlViewer7.AgUiPiHtmlViewer.1
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAACAAAAAAADAAAAAAAPPPPPPPPPPPPPPPPIPPPPPPPBOPPPPPPAAAAAAAAAAAAAAAALHJAAAAAIFEAAAAA
+IsActiveChildFrame=True
+IsFrameVisible=True
+ptn_Child1=AGI Custom Node Data
+[WorkState_v1_2.Frames.ChildFrames.Document-0.ViewFrame-0.AGI Custom Node Data]
+CurrentURL=<HOME>ODTK\AppData\LaunchPad\Utilities\ScriptingTool.htm
+[WorkState_v1_2.Frames.ChildFrames.Document-2]
+ptn_Child1=ViewFrame-0
+[WorkState_v1_2.Frames.ChildFrames.Document-2.ViewFrame-0]
+DocPathName=F:\ODTK\AgUiWhitePanel7.AgUiPiWhitePanel.1
+DocumentString=AgUiWhitePanel7.AgUiPiWhitePanel.1
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAPIDAAAAAGACAAAAA
+IsActiveChildFrame=False
+IsFrameVisible=True
+ProfUISBarID=63001
+[WorkState_v1_2.Frames.ChildFrames.Document-3]
+ptn_Child1=ViewFrame-0
+[WorkState_v1_2.Frames.ChildFrames.Document-3.ViewFrame-0]
+DocPathName=F:\ODTK\AgUiAttrBrowser7.AgUiPiAttrBrowser.1
+DocumentString=AgUiAttrBrowser7.AgUiPiAttrBrowser.1
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAPIDAAAAADACAAAAA
+IsActiveChildFrame=False
+IsFrameVisible=True
+ProfUISBarID=63000
+ptn_Child1=AGI Custom Node Data
+[WorkState_v1_2.Frames.ChildFrames.Document-4]
+ptn_Child1=ViewFrame-0
+[WorkState_v1_2.Frames.ChildFrames.Document-4.ViewFrame-0]
+DocPathName=F:\ODTK\AgUiMessageViewer7.AgUiPiMessageViewer.1
+DocumentString=AgUiMessageViewer7.AgUiPiMessageViewer.1
+DocTemplateIndex=0
+WindowPlacement=MCAAAAAAAAAAAAAABAAAAAAAPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPAAAAAAAAAAAAAAAAAAKAAAAAKMAAAAAA
+IsActiveChildFrame=False
+IsFrameVisible=True
+ProfUISBarID=63002

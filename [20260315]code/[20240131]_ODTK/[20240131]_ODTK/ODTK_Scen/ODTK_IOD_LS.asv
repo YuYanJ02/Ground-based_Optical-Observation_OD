@@ -1,0 +1,102 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 使用ODTK进行初始定轨，再使用最小二乘定轨
+%
+% 作者：尹永辰
+% 邮箱：yinyongchen22@csu.ac.cn
+% 单位：中国科学院空间应用工程与技术中心，空间探索室
+% 时间：2024年07月24日
+%%%%%%%%%%%%%%%%%%%%%%%
+
+plot_IO = 0; % 不画图
+% plot_IO = 1; % 画图
+
+% 仿真数据步长
+simu_tStep = 60;
+
+
+%% ---------------------- 初始定轨 -------------------------------------
+
+% 设置观测站
+odtk_IOD_groundX.Method.SelectedFacility.ID = "trakSys.SYX";
+
+% 选择观测时刻
+odtk_IOD_groundX.Method.SelectedMeasurements{0}.value = odtk_DROA.IOD_groundX.Method.SelectedMeasurements.Choices{0};
+odtk_IOD_groundX.Method.SelectedMeasurements{1}.value = odtk_DROA.IOD_groundX.Method.SelectedMeasurements.Choices{3};
+odtk_IOD_groundX.Method.SelectedMeasurements{2}.value = odtk_DROA.IOD_groundX.Method.SelectedMeasurements.Choices{5};
+% odtk.Train.LEO.IOD1.Method.SelectedMeasurements{0}.value = odtk.Train.LEO.IOD1.Method.SelectedMeasurements.Choices{end};
+fprintf('ODTK: DROA初定轨观测数据选取 \n')
+
+% 弧段开始时间（第一个观测数据时间，UTCG）
+Init_info = char(odtk_IOD_groundX.Method.SelectedMeasurements.Choices{0});
+idx_month = find(isletter(Init_info));
+tauk = Init_info(idx_month(1)-3:idx_month(1)+20);
+
+% 弧段结束时间（最后一个观测数据时间，UTCG）
+Final_info = char(odtk_IOD_groundX.Method.SelectedMeasurements.Choices{odtk_IOD_groundX.Method.SelectedMeasurements.Choices.size-1});
+idx_month = find(isletter(Final_info));
+taukp1 = Init_info(idx_month(1)-3:idx_month(1)+20);
+
+% taukp1前6小时
+tauTemp = converter.ConvertDate('JED' , 'UTCG' , num2str(str2num(converter.ConvertDate('UTCG' , 'JED' , taukp1)) - 6 / 24));
+
+% --------------------- 更新卫星状态（生成模拟测量数据） ---------------------
+cart = odtk_DROA.OrbitState.ToCartesian();
+cart.Epoch.Set(taukp1, 'UTCG');
+cart.CentralBody = 'Earth';
+cart.CoordFrame = Coord_flag;
+
+% 运行IOD
+odtk_IOD_groundX.go();
+
+fprintf('ODTK: DROA地基X初定轨 \n')
+
+odtk_IOD_out = odtk_IOD_groundX.Output.OrbitState.ToCartesian();
+cart.XPosition.Set(num2str(odtk_IOD_out.XPosition.GetIn('km') * 1e6), 'mm');
+cart.YPosition.Set(num2str(odtk_IOD_out.YPosition.GetIn('km') * 1e6), 'mm');
+cart.ZPosition.Set(num2str(odtk_IOD_out.ZPosition.GetIn('km') * 1e6), 'mm');
+cart.XVelocity.Set(num2str(odtk_IOD_out.XVelocity.GetIn('km*sec^-1') * 1e6), 'mm*sec^-1');
+cart.YVelocity.Set(num2str(odtk_IOD_out.YVelocity.GetIn('km*sec^-1') * 1e6), 'mm*sec^-1');
+cart.ZVelocity.Set(num2str(odtk_IOD_out.ZVelocity.GetIn('km*sec^-1') * 1e6), 'mm*sec^-1');
+cart = odtk_DROA.OrbitState.Assign(cart);
+
+fprintf('ODTK: DROA状态更新 \n')
+
+
+%% --------------------------- 最小二乘 --------------------------
+% 修改
+ls_temp = odtk_DROA_LS_groundX.LeastSquares.Stages{0};
+ls_temp.StartTime.Set(tauk , 'UTCG');
+ls_temp.StopTime.Set(tauTemp , 'UTCG');
+
+% 运行LS
+odtk_DROA_LS_groundX.go();
+
+% 输出定轨结果
+od_epoch = odtk_DROA_LS_groundX.Output.OrbitState.Epoch.Format('UTCG');
+od_state = [odtk_DROA_LS_groundX.Output.OrbitState.XPosition.GetIn('km');
+    odtk_DROA_LS_groundX.Output.OrbitState.YPosition.GetIn('km');
+    odtk_DROA_LS_groundX.Output.OrbitState.ZPosition.GetIn('km');
+    odtk_DROA_LS_groundX.Output.OrbitState.XVelocity.GetIn('km*sec^-1');
+    odtk_DROA_LS_groundX.Output.OrbitState.YVelocity.GetIn('km*sec^-1');
+    odtk_DROA_LS_groundX.Output.OrbitState.ZVelocity.GetIn('km*sec^-1')];
+
+fprintf('ODTK: DROA地基X定轨 \n');
+
+%% --------------------------- 预报 --------------------------
+
+if ODTK_Pre
+    % 生成过程状态星历
+    odtk_DROA_LS_groundX.Output.STKEphemeris.DuringProcess.Generate = 'true';
+    odtk_DROA_LS_groundX.Output.STKEphemeris.DuringProcess.UniformTimeStep = 30;
+
+    % 生成预报星历
+    odtk_DROA_LS_groundX.Output.STKEphemeris.Predict.Generate = 'true';
+    odtk_DROA_LS_groundX.Output.STKEphemeris.Predict.Generate.TimeStep = 30;
+    
+    odtk_DROA_LS_groundX.Output.STKEphemeris.OutputDirectory.Dereference = 'C:\Users\YYC\Desktop\[20240102]_ODTK_kaifa\[20230822]_FEIKONG_V1.0\output';
+end
+
+
+

@@ -1,0 +1,4 @@
+使用方法：
+1）安装STK11.6和ODTK 7.2
+2）双击MAIN_LaunchODTK.cmd
+3）MAIN_FEIKONG.m
